@@ -5,7 +5,10 @@ It's my very old project from high school when I was learning javascript. Platfo
 * implemented 10/20 different spells
 * each spell has three levels of power
 * level editor included
+
 Game is not finished and I haven't been doing anything since 2012.
+
+Open file aos/game/index.html in your browser if you want play game.
 
 ![Figting with Elf](media/fight.png?raw=true  "Fighting with Elf")
 ![Blood effect when player has low HP](media/blood_efect.png?raw=true  "Blood effect when player has low HP")
