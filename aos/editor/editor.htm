@@ -1,0 +1,117 @@
+<!--
+    Title:  AOS - Adventure of secrets
+    Author: Krzysztof "Krabex" Drab
+    E-mail: Krabex93@gmail.com
+-->
+
+<!DOCTYPE html>
+
+<head>
+<title>AOS - Adventure of secrets - Editor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link type="text/css" href="css/start/jquery-ui-1.8.16.custom.css" rel="stylesheet" />	
+<script language='Javascript' type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+<script language='Javascript' type='text/javascript' src='jquery-ui-1.8.16.custom.min.js'></script>
+<script language='Javascript' type='text/javascript' src='editor.js'></script>
+<style type="text/css">
+			body{ font: 62.5% "Trebuchet MS" }
+</style>
+</head>
+
+<body>
+    <div align="left">
+        <canvas id="canvas" width="640" height="480">
+            Sorry, but your browser cannot run this game. Try updating to a more recent browser release.
+        </canvas>
+        <div id="FPS"></div>
+    </div>
+    <div align="left">
+        <div class="ui-widget">
+			<div class="ui-state-highlight ui-corner-all" style="margin-top: 10px; height: 32px; width: 640px;"> 
+				<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+				Dialogs:
+			</div>
+		</div>
+		<div id="open_dialogs_div">
+            <button id="tiles_dialog_open">Tiles Dialog</button>
+            <button id="special_dialog_open">Special Dialog</button>
+            <button id="settings_dialog_open">Settings Dialog</button><br>
+        </div>
+        <div class="ui-widget">
+			<div class="ui-state-highlight ui-corner-all" style="margin-top: 10px; height: 32px; width: 640px;"> 
+				<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+				Layers visibility:
+			</div>
+		</div>
+        <div id='checkboxes'>
+            <input type="checkbox" id="check_base" /><label for="check_base">Base</label>
+            <input type="checkbox" id="check_cover" /><label for="check_cover">Cover</label>
+            <input type="checkbox" id="check_special" /><label for="check_special">Special</label>
+        </div>
+         <div class="ui-widget">
+			<div class="ui-state-highlight ui-corner-all" style="margin-top: 10px; height: 32px; width: 640px;"> 
+				<p><span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"></span>
+				Drawing on layer:
+			</div>
+		</div>
+        <div id="radios">
+            <input type="radio" id="radio_base" name="radio"/><label for="radio_base">Base</label>
+            <input type="radio" id="radio_cover" name="radio"/><label for="radio_cover">Cover</label>
+            <input type="radio" id="radio_special" name="radio"/><label for="radio_special">Special</label>
+        </div>
+        
+        <div id="tiles_dialog"></div>
+        <div id="special_dialog"></div>
+        </div>
+        <div id="settings_dialog">
+            <div id='settings_checkbox'>
+                <input type="checkbox" id="check_smart_erasing" /><label for="check_smart_erasing">Smart erasing</label>
+                <input type="checkbox" id="check_autocollision" /><label for="check_autocollision">AutoCollision</label>
+            </div>
+            Brush size:
+            <div id="brush_size"></div>
+                        
+            <form>
+            <fieldset style="padding:0px; border:0px none; margin-top:25px;">
+            <label for="map_width" style="display: block;float: left;">Width: </label>
+            <input type="text" name="map_width" id="map_width" class="text ui-widget-content ui-corner-all" /><br>
+            <label for="map_height">Height: </label>
+            <input type="text" name="map_height" id="map_height" value="" class="text ui-widget-content ui-corner-all" />
+            </fieldset>
+            </form>
+        </div>
+        <div id="output_dialog"><textarea id='output_area' rows=10 cols=30></textarea></div>
+            
+        <script language="javascript" type="text/javascript">
+            $("#tiles_dialog").dialog({title: "Tiles dialog", width: 690, height: 430, position: ['right', 'top']});
+            $("#special_dialog").dialog({title: "Special dialog", width: 500});
+            $("#settings_dialog").dialog({title: "Settings dialog"});
+            $("#output_dialog").dialog({title: "Map code"});
+            
+            $("#tiles_dialog_open").button().click(function(){$("#tiles_dialog").dialog('open');return false});
+            $("#special_dialog_open").button().click(function(){$("#special_dialog").dialog('open');return false});
+            $("#settings_dialog_open").button().click(function(){$("#settings_dialog").dialog('open');return false});
+    
+            $("#check_base").attr('checked', true);
+            $("#check_cover").attr('checked', true);
+            $("#check_special").attr('checked', true);
+            $("#radio_base").attr('checked', true);
+            $("#check_shuffling").attr('checked', true);
+            $("#check_autocollision").attr('checked', true);
+            $("#brush_size").slider({
+                min: 1, max: 6, value: 1, range: "min"
+            });
+            
+            $("#check").button();
+            $("#open_dialogs_div").buttonset();
+            $("#checkboxes").buttonset();
+            $("#radios").buttonset();
+            $("#settings_checkbox").buttonset();
+    
+           var game = new Game();
+           game.Run();
+        </script>
+    </div>
+</body>
+
+</html>

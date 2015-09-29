@@ -1,0 +1,115 @@
+<!--
+    Title:  AOS - Adventure of secrets
+    Author: Krzysztof "Krabex" Drab
+    E-mail: Krabex93@gmail.com
+-->
+
+<!DOCTYPE html>
+
+<head>
+<title>World of secrets and magic</title>
+
+<script language='Javascript' type='text/javascript' src='Utilities.js'></script>
+<script language='Javascript' type='text/javascript' src='Config.js'></script>
+<script language='Javascript' type='text/javascript' src='CHUD.js'></script>
+<script language='Javascript' type='text/javascript' src='CMap.js'></script>
+<script language='Javascript' type='text/javascript' src='CSpellList.js'></script>
+<script language='Javascript' type='text/javascript' src='Game.js'></script>
+<script language='Javascript' type='text/javascript' src='imgManager.js'></script>
+<script language='Javascript' type='text/javascript' src='dialogManager.js'></script>
+<script language='Javascript' type='text/javascript' src='characters/CBaseCharacter.js'></script>
+<script language='Javascript' type='text/javascript' src='characters/CPlayer.js'></script>
+<script language='Javascript' type='text/javascript' src='characters/CCharacter.js'></script>
+<script language='Javascript' type='text/javascript' src='characters/AI/AISimple.js'></script>
+<script language='Javascript' type='text/javascript' src='characters/AI/AIFollowPoint.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CSpellsManager.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CMovingSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CExplosionSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CFireArrowsSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CFireBallSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CHasteSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CHealSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CIceSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CLadderSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CPoisonedLeafSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CProtectSpell.js'></script>
+<script language='Javascript' type='text/javascript' src='spells/CRockDestroySpell.js'></script>
+<script language='Javascript' type='text/javascript' src='data.js'></script>
+<script language='Javascript' type='text/javascript' src='../../particle_test/mrspeaker-parcycle-6296764/particle.js'></script>
+<script language='Javascript' type='text/javascript' src='../../gestures/gestures.js'></script>
+<style>
+body {
+    background-color: #010d1f;
+    color: #A8A8A8;
+    font-size: 13px;
+    overflow: hidden;
+}
+
+div#content {
+    background-image: url("../site/game_background.png");
+    width: 1040px;
+    height: 980px;
+    margin: 0 auto;
+}
+
+div#top {
+    width: 100%;
+    height: 140px;    
+}
+
+div#tips {
+    margin-left: 425px;
+    width: 380px;
+    height: 80%;
+    overflow: hidden;
+}
+div.tip {
+    padding: 5px;
+    width: 370px;
+    float: left;
+}
+div#game {
+    float:left;
+    width: 640px;
+    height: 480px;
+    margin-left: 200px;
+}
+
+div#ad {
+    width: 160px;
+    height: 480px;
+    float: left;
+    margin-left: 35px;
+}
+h3 {
+    color: #FF9E01;
+    font-family: Georgia;
+    font-style: italic;
+    font-size: 12px;
+}
+span.gest {
+    color: #FF9E01;
+}
+</style>
+</head>
+
+<body>
+    <div id="content">
+    <div id="top"><div id="tips">
+        <div class="tip"><h3>Casting spells</h3>To cast a spell you need to make a gesture on the screen. Each spell has its unique gesture. To cast rock destroying spell press left mouse button and then move cursor right and left (<span class="gest">&rarr;&larr;</span>). If you want to create a ladder make the follwoing gesture: <span class="gest">&and;</span>.</div>
+    </div></div>
+    <div id="mainBar"><div id="game">
+        <canvas id="canvas" width="640" height="480">
+            Sorry, but your browser cannot run this game. Try updating to a more recent browser release.
+        </canvas>
+        <script language="javascript" type="text/javascript">
+            var game = new Game();
+            game.Run();
+        </script>
+    </div><div id="ad"></div></div>
+        <div id="FPS"></div>
+    </div>
+</body>
+
+</html>

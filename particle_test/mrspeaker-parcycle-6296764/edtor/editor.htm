@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+
+<head>
+    <title>Particle Editor</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <link type="text/css" href="css/start/jquery-ui-1.8.16.custom.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/colorpicker.css" type="text/css" />	
+    <script language='Javascript' type='text/javascript' src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
+    <script language='Javascript' type='text/javascript' src='jquery-ui-1.8.16.custom.min.js'></script>
+    <script language='Javascript' type='text/javascript' src='../particle.js'></script>
+	<script type="text/javascript" src="js/colorpicker.js"></script>
+    <script type="text/javascript" src="js/eye.js"></script>
+    <script type="text/javascript" src="js/utils.js"></script>
+<script type="text/javascript" charset="utf-8">
+(function ($) {
+    $(document).ready(function(){
+        controller.init();
+        $('#colorSelector').ColorPicker({
+	       color: 'rgb(250, 218, 68)',
+           onShow: function (colpkr) {
+              $(colpkr).fadeIn(500);
+		      return false;
+	       },
+            onHide: function (colpkr) {
+                $(colpkr).fadeOut(500);
+                return false;
+	       },
+            onChange: function (hsb, hex, rgb) {
+                $('#colorSelector div').css('backgroundColor', '#' + hex);
+                controller.p1.startColour[0] = rgb.r;
+                controller.p1.startColour[1] = rgb.g;
+                controller.p1.startColour[2] = rgb.b;
+	       }
+        });
+        $('#colorSelector_end').ColorPicker({
+	       color: 'rgb(245, 35, 0)',
+           onShow: function (colpkr) {
+              $(colpkr).fadeIn(500);
+		      return false;
+	       },
+            onHide: function (colpkr) {
+                $(colpkr).fadeOut(500);
+                return false;
+	       },
+            onChange: function (hsb, hex, rgb) {
+                $('#colorSelector_end div').css('backgroundColor', '#' + hex);
+                controller.p1.endColour[0] = rgb.r;
+                controller.p1.endColour[1] = rgb.g;
+                controller.p1.endColour[2] = rgb.b;
+	       }
+        });
+        $("#tabs").tabs();
+        $("#generate_code").button().click(function(){
+            var s = controller.p1;
+            $("#particle_code").text("{ maxParticles: "+s.maxParticles+", positionRandom: Vector.create("+s.positionRandom.x+","+s.positionRandom.y +
+            "), emissionOffset: "+s.emissionOffset+", size: "+s.size+", sizeRandom: "+s.sizeRandom+(s.style == RADIAL ? (", sharpness: " + s.sharpness + ", sharpnessRandom: " + s.sharpnessRandom) : (", length: " + s.length + ", lengthRandom: " + s.lengthRandom))+
+            ", speed: "+s.speed+", speedRandom: "+s.speedRandom+", lifeSpan: "+s.lifeSpan+", lifeSpanRandom: "+s.lifeSpanRandom+", angle: "+s.angle+", angleRandom: "+s.angleRandom+
+            ", gravity: Vector.create("+s.gravity.x+","+s.gravity.y+"), gravityType: "+s.gravityType+", startColour: ["+s.startColour.toString()+"], startColourRandom: ["+s.startColourRandom.toString()+"], endColour: ["+s.endColour.toString()+"], endColourRandom: ["+s.endColourRandom.toString()+"], style: "+s.style+"}");
+        })
+    })
+})(jQuery);
+
+        var controller = {
+			canvas : null,
+			context : null,
+
+			init : function(){
+				this.canvas = document.getElementById( "canvas" );
+				this.context = this.canvas.getContext( "2d" );
+				this.context.globalCompositeOperation = "lighter"; //"source-over", "lighter", "darker", "xor"  are good
+
+				this.p1 = new cParticleSystem();	
+
+				// Set some properties - check the class
+                this.p1.position = Vector.create(300, 200);
+                this.p1.style = RADIAL;
+                this.p1.gravityType = LINEAR;
+				this.p1.init();
+
+				this.main();
+			},
+
+			main : function(){
+				this.update();
+				this.draw();
+				setTimeout( function(){ controller.main(); }, 100 );
+			},
+
+			update : function(){	
+				this.p1.update( 1 ); // "1" is used as a delta... should be calculated as time between frames
+			},
+
+			draw : function(){
+				this.context.clearRect( 0, 0, 690, 452 );
+
+				this.p1.render( this.context );
+			}
+		};
+</script>
+<style type="text/css">
+			body{ font: 62.5% "Trebuchet MS" }
+            #canvas { background-color: #000; }
+</style>
+</head>
+
+<body>
+    <div style="float: left;">
+        <canvas id="canvas" width="640" height="480">
+            Sorry, but your browser cannot run this game. Try updating to a more recent browser release.
+        </canvas>
+        <div id="FPS"></div>
+    </div>
+    <div style="float: left; width: 400px; margin-left: 50px;">
+    <div id="tabs">
+        <ul>
+		  <li><a href="#tabs-1">Global behaviour</a></li>
+		  <li><a href="#tabs-2">Colours</a></li>
+		  <li><a href="#tabs-3">Particle code</a></li>
+	   </ul>
+       <div id="tabs-1">
+        style: <div id="style">
+            <input type="radio" id="style_linear" name="style"/><label for="style_linear">Linear</label>
+            <input type="radio" id="style_radial" name="style"/><label for="style_radial">Radial</label>
+        </div>
+        gravityType: <div id="gravityType">
+            <input type="radio" id="gravityType_linear" name="gravityType"/><label for="gravityType_linear">Linear</label>
+            <input type="radio" id="gravityType_central" name="gravityType"/><label for="gravityType_central">Central</label>
+        </div>
+        maxParticles: <div id="maxParticles"></div>
+        spreadX: <div id="spreadX"></div>
+        spreadY: <div id="spreadY"></div>
+        emissionOffset: <div id="emissionOffset"></div>
+        size: <div id="size"></div>
+        sizeRandom: <div id="sizeRandom"></div>
+        <div class='only_linear' style="display: none;">
+            length: <div id="length"></div>
+            lengthRandom: <div id="lengthRandom"></div>
+        </div>
+        <div class='only_radial'>
+            sharpness: <div id="sharpness"></div>
+            sharpnessRandom: <div id="sharpnessRandom"></div>
+        </div>
+        speed: <div id="speed"></div>
+        speedRandom: <div id="speedRandom"></div>
+        lifeSpan: <div id="lifeSpan"></div>
+        lifeSpanRandom: <div id="lifeSpanRandom"></div>
+        angle: <div id="angle"></div>
+        angleRandom: <div id="angleRandom"></div>
+        gravityX: <div id="gravityX"></div>
+        gravityY: <div id="gravityY"></div>
+        </div>
+        <div id="tabs-2">
+        startColour: <div id="colorSelector"><div style="background-color: rgb(250, 218, 68);"></div></div> 
+        alpha_start: <div id="alpha_start"></div>
+        r_startRandom: <div id="r_startRandom"></div>
+        g_startRandom: <div id="g_startRandom"></div>
+        b_startRandom: <div id="b_startRandom"></div>
+        a_startRandom: <div id="a_startRandom"></div>        
+        endColour: <div id="colorSelector_end"><div style="background-color: rgb(245, 35, 0);"></div></div> 
+        alpha_end: <div id="alpha_end"></div>
+        r_endRandom: <div id="r_endRandom"></div>
+        g_endRandom: <div id="g_endRandom"></div>
+        b_endRandom: <div id="b_endRandom"></div>
+        a_endRandom: <div id="a_endRandom"></div>
+        </div>
+        <div id="tabs-3">
+        <button id="generate_code">Generate particle code</button>
+        <div id="particle_code">...</div>
+        </div>
+    </div>
+        <script language="javascript" type="text/javascript">      
+            $("#style_radial").attr('checked', true);
+            $("#gravityType_linear").attr('checked', true);
+            
+            // INIT UI
+            $("#style").buttonset();
+            $("#gravityType").buttonset();
+            
+            $("#maxParticles").slider({
+                min: 0, max: 250, value: 150, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.maxParticles = ui.value;
+                }
+            })
+            $("#spreadX").slider({
+                min: 0, max: 150, value: 10, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.positionRandom = Vector.create(ui.value, controller.p1.positionRandom.y);
+                }
+            })
+            $("#spreadY").slider({
+                min: 0, max: 150, value: 10, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.positionRandom = Vector.create(controller.p1.positionRandom.x, ui.value);
+                }
+            })
+            $("#emissionOffset").slider({
+                min: 0, max: 100, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.emissionOffset = ui.value;
+                }
+            })
+            $("#size").slider({
+                min: 0, max: 100, value: 45, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.size = ui.value;
+                }
+            })
+            $("#sizeRandom").slider({
+                min: 0, max: 100, value: 15, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.sizeRandom = ui.value;
+                }
+            })
+            $("#length").slider({
+                min: 0, max: 100, value: 30, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.length = ui.value;
+                }
+            })
+            $("#lengthRandom").slider({
+                min: 0, max: 100, value: 15, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.lengthRandom = ui.value;
+                }
+            })
+            $("#sharpness").slider({
+                min: 0, max: 100, value: 40, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.sharpness = ui.value;
+                }
+            })
+            $("#sharpnessRandom").slider({
+                min: 0, max: 100, value: 10, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.sharpnessRandom = ui.value;
+                }
+            })
+            $("#speed").slider({
+                min: 0, max: 20, value: 5, step: 0.2, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.speed = ui.value;
+                }
+            })
+            $("#speedRandom").slider({
+                min: 0, max: 20, value: 1.5, step: 0.2, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.speedRandom = ui.value;
+                }
+            })
+            $("#lifeSpan").slider({
+                min: 0, max: 50, value: 9, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.lifeSpan = ui.value;
+                }
+            })
+            $("#lifeSpanRandom").slider({
+                min: 0, max: 50, value: 7, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.lifeSpanRandom = ui.value;
+                }
+            })
+            $("#angle").slider({
+                min: 0, max: 360, value: 0, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.angle = ui.value;
+                }
+            })
+            $("#angleRandom").slider({
+                min: 0, max: 360, value: 360, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.angleRandom = ui.value;
+                }
+            })
+            $("#gravityX").slider({
+                min: -10, max: 10, value: 0, step: 0.2, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.gravity = Vector.create(ui.value, controller.p1.gravity.y);
+                }
+            })
+            $("#gravityY").slider({
+                min: -10, max: 10, value: 0, step: 0.2, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.gravity = Vector.create(controller.p1.gravity.x, ui.value);
+                }
+            })
+            $("#alpha_start").slider({
+                min: 0, max: 1, value: 1, step: 0.01, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.startColour[3] = ui.value;
+                }
+            })
+            $("#alpha_end").slider({
+                min: 0, max: 1, value: 0, step: 0.01, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.endColour[3] = ui.value;
+                }
+            })
+            $("#r_startRandom").slider({
+                min: 0, max: 255, value: 62, step: 1, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.startColourRandom[0] = ui.value;
+                }
+            })
+            $("#g_startRandom").slider({
+                min: 0, max: 255, value: 60, step: 1, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.startColourRandom[1] = ui.value;
+                }
+            })
+            $("#b_startRandom").slider({
+                min: 0, max: 255, value: 60, step: 1, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.startColourRandom[2] = ui.value;
+                }
+            })
+            $("#a_startRandom").slider({
+                min: 0, max: 1, value: 0, step: 0.01, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.startColourRandom[3] = ui.value;
+                }
+            })
+            $("#r_endRandom").slider({
+                min: 0, max: 255, value: 60, step: 1, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.endColourRandom[0] = ui.value;
+                }
+            })
+            $("#g_endRandom").slider({
+                min: 0, max: 255, value: 60, step: 1, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.endColourRandom[1] = ui.value;
+                }
+            })
+            $("#b_endRandom").slider({
+                min: 0, max: 255, value: 60, step: 1, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.endColourRandom[2] = ui.value;
+                }
+            })
+            $("#a_endRandom").slider({
+                min: 0, max: 1, value: 0, step: 0.01, range: "min",
+                slide: function(e, ui) {
+                    controller.p1.endColourRandom[3] = ui.value;
+                }
+            })
+            // CLICK EVENTS
+            // style
+            $("#style_linear").click(function(){controller.p1.style = LINEAR; $(".only_linear").show(); $(".only_radial").hide(); });
+            $("#style_radial").click(function(){controller.p1.style = RADIAL; $(".only_linear").hide(); $(".only_radial").show(); });
+            // gravityType
+            $("#gravityType_linear").click(function(){controller.p1.gravityType = LINEAR; });
+            $("#gravityType_central").click(function(){controller.p1.gravityType = CENTRAL; });
+        </script>
+    </div>
+</body>
+
+</html>
