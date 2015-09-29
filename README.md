@@ -7,5 +7,7 @@ It's my very old project from high school when I was learning javascript. Platfo
 * level editor included
 Game is not finished and I haven't been doing anything since 2012.
 
-![Real time visualisation](Media/screen1.png?raw=true  "Project contains real time visualisation")
-![Real time visualisation](Media/screen1.png?raw=true  "Project contains real time visualisation")
+![Figting with Elf](media/fight.png?raw=true  "Fighting with Elf")
+![Blood effect when player has low HP](media/blood_efect.png?raw=true  "Blood effect when player has low HP")
+![Speed up spell effect](media/haste.png?raw=true  "Speed up spell effect")
+![Heal spell effect](media/heal_spell.png?raw=true  "Heal spell effect")
